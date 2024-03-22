@@ -1,0 +1,153 @@
+#:kivy 2.2.1
+ScreensManager:
+	Menu:
+		name: 'menu'
+	TaskScreen:
+		name: 'sunday'
+	TaskScreen:
+		name: 'monday'
+	TaskScreen:
+		name: 'tuesday'
+	TaskScreen:
+		name: 'wednesday'
+	TaskScreen:
+		name: 'thursday'
+	TaskScreen:
+		name: 'friday'
+	TaskScreen:
+		name: 'saturday'
+	TaskAdder:
+		name: 'taskAdder'
+<HidenMenu@NavigationDrawer>:
+	anim_type: 'slide_above_simple'
+
+<TaskScreen>:
+	HidenMenu:
+		id: hiden_menu
+		BoxLayout:
+			Label:
+				text: 'Hiden Menu'
+		BoxLayout:
+			id: task_screen_general_box
+			orientation: 'vertical'
+			canvas:
+				Color:
+					rgba: .2, .2, .3, .5
+				Rectangle:
+					size: self.size
+					pos: self.pos
+			ActionBar:
+				background_color: [.1, .5, .7, 1]
+				ActionView:
+					background_image: 'images/actionBar.png'
+					ActionPrevious:
+						on_release: app.root.current='menu'
+					ActionGroup:
+						mode: 'spinner'
+						text: 'Day'
+						ActionButton:
+							text: 'Sunday'
+							on_release: app.root.current = 'sunday'
+						ActionButton:
+							text: 'Monday'
+							on_release: app.root.current = 'monday'
+						ActionButton:
+							text: 'Tuesday'
+							on_release: app.root.current = 'tuesday'
+						ActionButton:
+							text: 'Wednesday'
+							on_release: app.root.current = 'wednesday'
+						ActionButton:
+							text: 'Thursday'
+							on_release: app.root.current = 'thursday'
+						ActionButton:
+							text: 'Friday'
+							on_release: app.root.current = 'friday'
+						ActionButton:
+							text: 'Saturday'
+							on_release: app.root.current = 'saturday'
+			ScrollView:
+				id: Scroll
+				BoxLayout:
+					id: task_container
+					spacing: '5dp'
+					orientation: 'vertical'
+					size_hint_y: None
+					height: self.minimum_height
+			
+			BoxLayout:
+				size_hint: None, None
+				width: '55dp'
+				height: '55dp'
+				RoundButton:
+					size_hint: None, None
+					height: '55dp'
+					width: '55dp'
+					pos: root.right-(self.width*1.5), root.y+(self.width)
+					on_release: app.root.current = 'taskAdder'
+					
+<Menu@Screen>:
+	GridLayout:
+		cols: 1
+		padding: self.width*0.075, self.height*0.099
+		spacing: '10dp'
+		canvas:
+			Color:
+				rgba: 1,1,1,1
+			Rectangle:
+				source: 'images/simpleMenu.png'
+				size: self.parent.size
+		Image:
+			source: 'images/appIcon.png'
+			allow_stretch: True
+			
+		#Label:
+			#text: 'Ola! Seja bem vindo ao gestor de tempo\nnumero1 do mundo'
+		BoxLayout:
+			padding: self.width*0.075, self.height*0.099
+			spacing: '10dp'
+			CircRectangleButton:
+				text: 'Tarefas'
+				size_hint: 0.2, None
+				height: '30dp'
+				on_release: app.root.current= 'sunday'
+			CircRectangleButton:
+				text: 'Assistente'
+				size_hint: 0.2, None
+				height: '30dp'
+			CircRectangleButton:
+				text: 'Exit'
+				size_hint: 0.2, None
+				height: '30dp'
+				on_release: app.stop()
+				
+
+				
+<Task>:
+	id: task
+	size_hint_y: None
+	height: '150dp'
+	Label:
+		id: label
+	Button:
+		size_hint_x: None
+		width: '20dp'
+		text: 'X'
+		on_release: root.callRemover(root)
+	
+<TaskAdder>:
+	BoxLayout:
+		orientation: 'vertical'
+		Label:
+			text: 'Dia da semana que deseja fazer a tarefa:'
+		TextInput:
+			id: taskday
+		Label:
+			text: 'Descriçao da Tarefa'
+		TextInput:
+			id: taskdetail
+		Button:
+			text: 'Salvar'
+			on_release:
+				root.taskRegister()
+				root.manager.current = root.ids.taskday.text
